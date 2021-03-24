@@ -1,0 +1,58 @@
+---
+title: "TakeHomeExam2"
+author: "Kyle Kurkela"
+date: "3/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(lavaan)
+library(tidyverse)
+
+fomo.df <- read_csv('fomo.csv', col_types = cols())
+```
+
+## Model 1
+
+### 1. Model in Equation Form. 
+
+$$\begin{bmatrix} Y1 \\ Y2 \end{bmatrix} = 
+\begin{bmatrix} 0 & 0 \\ \beta_{21} & 0  \end{bmatrix} 
+\begin{bmatrix} Y1 \\ Y2 \end{bmatrix} +
+\begin{bmatrix} \gamma_{11} & 0 \\ \gamma_{12} & 0 \end{bmatrix}
+\begin{bmatrix} X1 \\ X2 \end{bmatrix} + 
+\begin{bmatrix} \zeta_{1} \\ \zeta_{2} \end{bmatrix}$$
+
+$\boldsymbol{\beta} = \begin{bmatrix} 0 & 0 \\ \beta_{21} & 0  \end{bmatrix}$  
+$\boldsymbol{\Gamma} = \begin{bmatrix} \gamma_{11} & 0 \\ \gamma_{12} & 0 \end{bmatrix}$  
+$\boldsymbol{\Phi} = \begin{bmatrix} \phi_{11} & \\ \phi_{21} & \phi_{22}\end{bmatrix}$  
+$\boldsymbol{\Psi} = \begin{bmatrix} \psi_{11} & \\ 0 & \psi_{22} \end{bmatrix}$  
+
+### 2. Count the number of parameters. Compute the degrees of freedom.
+
++ Free Parameters: 8  
++ df: 2
+
+### 3. Copy and paste R syntax. 
+
+```{r}
+m1 <- '
+FOMO ~ Boredom
+Boredom ~ Anxiety + Dep
+Anxiety~~Anxiety
+Dep~~Dep
+Anxiety~~Dep
+Boredom~~Boredom
+FOMO~~FOMO
+'
+
+model1.fit <- lavaan(model = m1, data = fomo.df)
+```
+
+### 4. Copy and paste the "inspect" output. 
+
+```{r}
+inspect(model1.fit, )
+```
+
